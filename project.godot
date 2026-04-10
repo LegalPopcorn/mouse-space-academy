@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="mouse-space-academy"
+run/main_scene="uid://v1m3ullo0wv6"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+constants="*uid://b0x56djhhbas5"
 
 [physics]
 
