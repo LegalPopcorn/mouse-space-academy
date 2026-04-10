@@ -1,6 +1,6 @@
 # mouse-space-academy
 Open-source 2D space flight simulator built in Godot 4
-...
+```
 mouse-space-academy/
 │
 ├── ✅ 1. Project structure
@@ -44,8 +44,8 @@ mouse-space-academy/
 │
 └── 🔲 14. Rocket builder
          Part stacking, assembly scene
-...         
-...
+```
+```
 mouse-space-academy/
 │
 ├── .github/
@@ -104,4 +104,4 @@ mouse-space-academy/
 ├── LICENSE
 ├── README.md
 └── project.godot
-...
+```
