@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 constants="*uid://b0x56djhhbas5"
+solarsystem="*uid://baivht7mlvn5g"
+selection="*uid://dqxlu4ny5yugs"
 
 [physics]
 

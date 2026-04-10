@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://v1m3ullo0wv6"]
 
 [ext_resource type="Script" uid="uid://d06liy5ubblpn" path="res://scenes/main.gd" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://ys0abr21vpog" path="res://scripts/camera/space_camera.gd" id="2_0wfyh"]
 
 [node name="Main" type="Node" unique_id=1801549103]
 script = ExtResource("1_o5qli")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1247836458]
+script = ExtResource("2_0wfyh")
