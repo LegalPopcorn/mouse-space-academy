@@ -2,9 +2,32 @@
 
 [ext_resource type="Script" uid="uid://d06liy5ubblpn" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://ys0abr21vpog" path="res://scripts/camera/space_camera.gd" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://dslp2sindij45" path="res://scenes/ui/hud.gd" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://dqr37vbc38mid" path="res://scripts/rocket/craft.gd" id="4_jyhfs"]
 
 [node name="Main" type="Node" unique_id=1801549103]
 script = ExtResource("1_o5qli")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=1247836458]
 script = ExtResource("2_0wfyh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=235369181]
+script = ExtResource("3_sugp2")
+
+[node name="body_label" type="Label" parent="CanvasLayer" unique_id=580568691]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="warp_label" type="Label" parent="CanvasLayer" unique_id=1480610960]
+offset_left = 3.0
+offset_top = 31.0
+offset_right = 43.0
+offset_bottom = 54.0
+
+[node name="date_label" type="Label" parent="CanvasLayer" unique_id=1464691067]
+offset_top = 54.0
+offset_right = 40.0
+offset_bottom = 77.0
+
+[node name="Craft" type="Node2D" parent="." unique_id=1346710918]
+script = ExtResource("4_jyhfs")

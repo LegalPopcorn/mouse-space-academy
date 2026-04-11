@@ -18,7 +18,7 @@ var _pan_start_mouse: Vector2
 var _pan_start_focus: Vector2
 
 # Optional: body to track (name string, "" = free camera)
-var tracking: String = "Moon"
+var tracking: String = "Earth"
 
 # ─── Public API ───────────────────────────────────────────────────────────────
 
@@ -45,21 +45,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			_zoom_toward(event.position, 0.8)   # zoom in
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
 			_zoom_toward(event.position, 1.25)  # zoom out
+		# Left click to select body
+		elif event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			_try_select_at(event.position)
 	# Time warp controls
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_PERIOD:        # . = speed up
-			solarsystem.time_scale = min(solarsystem.time_scale * 10.0, 1.0e18)
-			print("Time warp: ", solarsystem.time_scale, "x")
-		elif event.keycode == KEY_COMMA:       # , = slow down
-			solarsystem.time_scale = max(solarsystem.time_scale / 10.0, 1.0)
-			print("Time warp: ", solarsystem.time_scale, "x")
-		elif event.keycode == KEY_SPACE:       # space = reset to 1x
-			solarsystem.time_scale = 1.0
-			print("Time warp: 1x")
 	# Switching controls
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_PERIOD:
-			solarsystem.time_scale = min(solarsystem.time_scale * 10.0, 1.0e8)
+			solarsystem.time_scale = min(solarsystem.time_scale * 10.0, 1.0e19)
 			print("Time warp: ", solarsystem.time_scale, "x")
 		elif event.keycode == KEY_COMMA:
 			solarsystem.time_scale = max(solarsystem.time_scale / 10.0, 1.0)
@@ -111,15 +104,71 @@ func _draw() -> void:
 		draw_circle(screen_pos, pixel_radius, constants.BODIES[body_name]["color"])
 		if pixel_radius > 2.0:
 			draw_string(
-				ThemeDB.fallback_font,
-				screen_pos + Vector2(pixel_radius + 4, 4),
-				body_name,
-				HORIZONTAL_ALIGNMENT_LEFT,
-				-1, 12, Color.WHITE
-			)
+				ThemeDB.fallback_font, screen_pos + Vector2(pixel_radius + 4, 4),
+				body_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color.WHITE)
+	var craft = get_tree().get_first_node_in_group("crafts")
+	if craft:
+		var screen_pos = world_to_screen(craft.craft_position)
+		draw_circle(screen_pos, 4.0, Color.WHITE)
+	# Draw orbit prediction line
+	if craft:
+		var parent_name = craft.gravity_parent
+		var parent_world_pos = solarsystem.get_position(parent_name)
+		var parent_screen_pos = world_to_screen(parent_world_pos)
+
+		# Position and velocity relative to parent body
+		var rel_pos = craft.craft_position - parent_world_pos
+		var rel_vel = craft.craft_velocity  # velocity is already relative
+
+		var mu = constants.G * constants.BODIES[parent_name]["mass"]
+		var elements = orbitsolver.state_to_elements(rel_pos, rel_vel, mu)
+		var points = orbitsolver.orbit_points(elements, parent_screen_pos, meters_per_pixel)
+
+		# draw_polyline draws a line through all the points
+		if points.size() > 2:
+			draw_polyline(points, Color(1.0, 1.0, 1.0, 0.4), 1.0)
+
+
 
 func _process(_delta: float) -> void:
 	if tracking != "" and constants.BODIES.has(tracking):
 		focus = solarsystem.get_position(tracking)
 	queue_redraw()
-# ─── Debug draw ───────────────────────────────────────────────────────────────
+# ─── Click selection ──────────────────────────────────────────────────────────
+
+
+# ─── Click selection ──────────────────────────────────────────────────────────
+
+func _try_select_at(screen_pos: Vector2) -> void:
+	# Convert the click from screen space (pixels) to world space (meters)
+	var world_click = screen_to_world(screen_pos)
+
+	# Minimum selection radius: 10 pixels worth of world space
+	# This means small bodies are still clickable when zoomed out
+	var min_hit_radius = 10.0 * meters_per_pixel
+
+	var closest_name := ""
+	var closest_dist := INF  # Start with infinity so any real distance beats it
+
+	for body_name in constants.BODIES:
+		var body_pos = solarsystem.get_position(body_name)
+
+		# How far is the click from this body's center in world space?
+		var dist = world_click.distance_to(body_pos)
+
+		# Hit radius is whichever is larger: real radius or minimum 10-pixel radius
+		var hit_radius = max(constants.BODIES[body_name]["radius"], min_hit_radius)
+
+		# Is the click within this body's hit radius?
+		if dist < hit_radius:
+			# Is this the closest body we've found so far?
+			# (handles overlapping bodies at high zoom-out)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest_name = body_name
+
+	# If we found something, select and track it
+	if closest_name != "":
+		tracking = closest_name
+		selection.select_by_name(closest_name)
+		print("Selected: ", closest_name)
