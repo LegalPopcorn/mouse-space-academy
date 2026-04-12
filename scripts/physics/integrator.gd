@@ -41,7 +41,7 @@ func step(delta: float) -> void:
 # ─── Gravity ──────────────────────────────────────────────────────────────────
 
 func _gravitational_acceleration(pos: Vector2, body_name: String) -> Vector2:
-	var body_pos = solarsystem.get_position(body_name)
+	var body_pos = SolarSystem.get_position(body_name)
 	var r_vec = body_pos - pos                        # vector toward body
 	var r_sq = r_vec.length_squared()                 # distance squared
 
@@ -49,7 +49,7 @@ func _gravitational_acceleration(pos: Vector2, body_name: String) -> Vector2:
 		return Vector2.ZERO
 
 	var r = sqrt(r_sq)
-	var mu = constants.G * constants.BODIES[body_name]["mass"]
+	var mu = Constants.G * Constants.BODIES[body_name]["mass"]
 
 	# F = GMm/r² — but we want acceleration (F/m), so just GM/r²
 	# Direction: unit vector toward body
@@ -58,27 +58,27 @@ func _gravitational_acceleration(pos: Vector2, body_name: String) -> Vector2:
 # ─── SOI transitions ──────────────────────────────────────────────────────────
 
 func _check_soi() -> void:
-	var body_pos = solarsystem.get_position(gravity_parent)
+	var body_pos = SolarSystem.get_position(gravity_parent)
 	var dist = position.distance_to(body_pos)
-	var soi = constants.soi_radius(gravity_parent)
+	var soi = Constants.soi_radius(gravity_parent)
 
 	# Left current SOI — switch to parent
 	if dist > soi:
-		var parent_name = constants.BODIES[gravity_parent]["parent"]
+		var parent_name = Constants.BODIES[gravity_parent]["parent"]
 		if parent_name != "":
 			gravity_parent = parent_name
 			print("SOI exit → now orbiting ", gravity_parent)
 			return
 
 	# Check if we've entered a child body's SOI
-	for body_name in constants.BODIES:
-		if constants.BODIES[body_name]["parent"] != gravity_parent:
+	for body_name in Constants.BODIES:
+		if Constants.BODIES[body_name]["parent"] != gravity_parent:
 			continue
 		if body_name == gravity_parent:
 			continue
-		var child_pos = solarsystem.get_position(body_name)
+		var child_pos = SolarSystem.get_position(body_name)
 		var child_dist = position.distance_to(child_pos)
-		var child_soi = constants.soi_radius(body_name)
+		var child_soi = Constants.soi_radius(body_name)
 		if child_dist < child_soi:
 			gravity_parent = body_name
 			print("SOI enter → now orbiting ", gravity_parent)

@@ -1,0 +1,28 @@
+{
+  "launch_sites": [
+	{
+	  "name": "Kennedy Space Center",
+	  "body": "Earth",
+	  "angle_deg": 0.0,
+	  "description": "The classic. Florida coast, good orbital inclination."
+	},
+	{
+	  "name": "Baikonur Cosmodrome",
+	  "body": "Earth",
+	  "angle_deg": 15.0,
+	  "description": "Historic Soviet launch site."
+	},
+	{
+	  "name": "Guiana Space Centre",
+	  "body": "Earth",
+	  "angle_deg": -5.0,
+	  "description": "Close to the equator, excellent for GTO launches."
+	},
+	{
+	  "name": "Lunar South Pole",
+	  "body": "Moon",
+	  "angle_deg": 270.0,
+	  "description": "Near water ice deposits."
+	}
+  ]
+}

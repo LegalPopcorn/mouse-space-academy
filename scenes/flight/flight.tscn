@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://b5ht1fbwpuwtt"]
+
+[ext_resource type="Script" uid="uid://dt1ejkwkdx2cm" path="res://scenes/flight/flight.gd" id="1_llqh0"]
+
+[node name="Flight" type="Node2D" unique_id=2050034482]
+script = ExtResource("1_llqh0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1022606356]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=407011022]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="hud_throttle" type="Label" parent="CanvasLayer/Control" unique_id=373661103]
+layout_mode = 0
+offset_left = 322.0
+offset_top = 543.0
+offset_right = 362.0
+offset_bottom = 566.0
+
+[node name="hud_velocity" type="Label" parent="CanvasLayer/Control" unique_id=1250220377]
+layout_mode = 0
+offset_left = 492.0
+offset_top = 55.0
+offset_right = 532.0
+offset_bottom = 78.0
+
+[node name="hud_altitude" type="Label" parent="CanvasLayer/Control" unique_id=464501508]
+layout_mode = 0
+offset_left = 461.0
+offset_top = 8.0
+offset_right = 501.0
+offset_bottom = 31.0
+
+[node name="hud_time" type="Label" parent="CanvasLayer/Control" unique_id=274292881]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 10.0
+offset_right = 311.0
+offset_bottom = 33.0
+
+[node name="hud_warp" type="Label" parent="CanvasLayer/Control" unique_id=1704061895]
+layout_mode = 0
+offset_left = 283.0
+offset_top = 51.0
+offset_right = 323.0
+offset_bottom = 74.0
+
+[node name="hud_body" type="Label" parent="CanvasLayer/Control" unique_id=1173135775]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 10.0
+offset_right = 48.0
+offset_bottom = 33.0

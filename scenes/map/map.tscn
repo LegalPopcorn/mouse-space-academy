@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://phxeixkjpo0s"]
+
+[ext_resource type="Script" uid="uid://c7tppbuxnoecc" path="res://scenes/map/map.gd" id="1_sxf4j"]
+
+[node name="Map" type="Node2D" unique_id=2035847575]
+script = ExtResource("1_sxf4j")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1272512411]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1691008048]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label_focus" type="Label" parent="CanvasLayer/Control" unique_id=1315824542]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="label_hint" type="Label" parent="CanvasLayer/Control" unique_id=653801241]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

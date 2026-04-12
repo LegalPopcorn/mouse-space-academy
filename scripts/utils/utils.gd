@@ -1,11 +1,11 @@
-# constants.gd
+# Constants.gd
 # Global autoload — access anywhere as Constants.SOMETHING
 extends Node
 # ─── Test fce ───────────────────────────────────────────────────
 
 
 
-# ─── Fundamental constants ───────────────────────────────────────────────────
+# ─── Fundamental Constants ───────────────────────────────────────────────────
 
 const G := 6.674e-11          # Gravitational constant (m³ kg⁻¹ s⁻²)
 const AU := 1.496e11           # Astronomical unit in meters

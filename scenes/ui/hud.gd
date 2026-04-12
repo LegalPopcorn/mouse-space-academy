@@ -10,8 +10,8 @@ extends CanvasLayer
 @onready var date_label: Label = $date_label
 
 func _process(_delta: float) -> void:
-	# Current selection
-	var sel = selection.current()
+	# Current Selection
+	var sel = Selection.current()
 	if sel.is_empty():
 		body_label.text = "Nothing selected"
 	else:
@@ -23,7 +23,7 @@ func _process(_delta: float) -> void:
 		body_label.text += "\nSOI: " + craft.gravity_parent
 
 	# Time warp - nice metric format
-	var warp = solarsystem.time_scale
+	var warp = SolarSystem.time_scale
 	if warp >= 10e18:
 		warp_label.text = "Warp: " + str(warp / 10e18) + "Ex"
 	elif warp >= 10e15:
@@ -40,7 +40,7 @@ func _process(_delta: float) -> void:
 		warp_label.text = "Warp: " + str(warp) + "x"
 
 	# Simulated date — convert elapsed seconds to a readable date
-	date_label.text = "T+ " + _format_time(solarsystem.sim_time)
+	date_label.text = "T+ " + _format_time(SolarSystem.sim_time)
 
 # Convert seconds into days/hours/minutes/seconds
 func _format_time(seconds: float) -> String:

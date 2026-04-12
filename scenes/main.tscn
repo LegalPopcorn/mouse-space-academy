@@ -19,15 +19,16 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="warp_label" type="Label" parent="CanvasLayer" unique_id=1480610960]
-offset_left = 3.0
-offset_top = 31.0
-offset_right = 43.0
-offset_bottom = 54.0
+offset_left = 2.0
+offset_top = 62.0
+offset_right = 42.0
+offset_bottom = 85.0
 
 [node name="date_label" type="Label" parent="CanvasLayer" unique_id=1464691067]
-offset_top = 54.0
-offset_right = 40.0
-offset_bottom = 77.0
+offset_left = 1.0
+offset_top = 118.0
+offset_right = 41.0
+offset_bottom = 141.0
 
 [node name="Craft" type="Node2D" parent="." unique_id=1346710918]
 script = ExtResource("4_jyhfs")

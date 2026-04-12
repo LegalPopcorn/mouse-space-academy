@@ -1,4 +1,4 @@
-# selection.gd
+# Selection.gd
 # Autoload — tracks what the camera is focused on.
 extends Node
 

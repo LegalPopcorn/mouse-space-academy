@@ -11,16 +11,18 @@ config_version=5
 [application]
 
 config/name="mouse-space-academy"
-run/main_scene="uid://v1m3ullo0wv6"
+run/main_scene="uid://b5ht1fbwpuwtt"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-constants="*uid://b0x56djhhbas5"
-solarsystem="*uid://baivht7mlvn5g"
-selection="*uid://dqxlu4ny5yugs"
-orbitsolver="*uid://tnvlqvyhdtji"
+Constants="*uid://b0x56djhhbas5"
+SolarSystem="*uid://baivht7mlvn5g"
+Selection="*uid://dqxlu4ny5yugs"
+OrbitSolver="*uid://tnvlqvyhdtji"
+GameState="*uid://bwqvy6ug625cx"
+LaunchSiteManager="*uid://cfji42n6jqc2r"
 
 [physics]
 

@@ -48,28 +48,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		# Left click to select body
 		elif event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			_try_select_at(event.position)
-	# Time warp controls
-	# Switching controls
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_PERIOD:
-			solarsystem.time_scale = min(solarsystem.time_scale * 10.0, 1.0e19)
-			print("Time warp: ", solarsystem.time_scale, "x")
-		elif event.keycode == KEY_COMMA:
-			solarsystem.time_scale = max(solarsystem.time_scale / 10.0, 1.0)
-			print("Time warp: ", solarsystem.time_scale, "x")
-		elif event.keycode == KEY_SPACE:
-			solarsystem.time_scale = 1.0
-			print("Time warp: 1x")
-		elif event.keycode == KEY_TAB:          # Tab = cycle forward
-			var sel = selection.next()
-			tracking = sel.get("name", "")
-			print("Tracking: ", tracking)
-		elif event.keycode == KEY_Q:            # Q = cycle backward
-			var sel = selection.previous()
-			tracking = sel.get("name", "")
-			print("Tracking: ", tracking)
-
-		# Middle mouse pan
 		elif event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
 				_panning = true
@@ -78,6 +56,28 @@ func _unhandled_input(event: InputEvent) -> void:
 				tracking = ""          # detach from body when panning
 			else:
 				_panning = false
+	# Time warp controls
+	# Switching controls
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_PERIOD:
+			SolarSystem.time_scale = min(SolarSystem.time_scale * 10.0, 1.0e19)
+			print("Time warp: ", SolarSystem.time_scale, "x")
+		elif event.keycode == KEY_COMMA:
+			SolarSystem.time_scale = max(SolarSystem.time_scale / 10.0, 1.0)
+			print("Time warp: ", SolarSystem.time_scale, "x")
+		elif event.keycode == KEY_SPACE:
+			SolarSystem.time_scale = 1.0
+			print("Time warp: 1x")
+		elif event.keycode == KEY_TAB:          # Tab = cycle forward
+			var sel = Selection.next()
+			tracking = sel.get("name", "")
+			print("Tracking: ", tracking)
+		elif event.keycode == KEY_Q:            # Q = cycle backward
+			var sel = Selection.previous()
+			tracking = sel.get("name", "")
+			print("Tracking: ", tracking)
+		# Middle mouse pan
+		
 
 	# Pan drag
 	if event is InputEventMouseMotion and _panning:
@@ -97,11 +97,11 @@ func _zoom_toward(screen_pos: Vector2, factor: float) -> void:
 
 # Temporary: flat 2D position from orbit_radius (no simulation yet)
 func _draw() -> void:
-	for body_name in constants.BODIES:
-		var world_pos = solarsystem.get_position(body_name)
+	for body_name in Constants.BODIES:
+		var world_pos = SolarSystem.get_position(body_name)
 		var screen_pos = world_to_screen(world_pos)
-		var pixel_radius = max(world_to_pixel_radius(constants.BODIES[body_name]["radius"]), 3.0)
-		draw_circle(screen_pos, pixel_radius, constants.BODIES[body_name]["color"])
+		var pixel_radius = max(world_to_pixel_radius(Constants.BODIES[body_name]["radius"]), 3.0)
+		draw_circle(screen_pos, pixel_radius, Constants.BODIES[body_name]["color"])
 		if pixel_radius > 2.0:
 			draw_string(
 				ThemeDB.fallback_font, screen_pos + Vector2(pixel_radius + 4, 4),
@@ -113,16 +113,16 @@ func _draw() -> void:
 	# Draw orbit prediction line
 	if craft:
 		var parent_name = craft.gravity_parent
-		var parent_world_pos = solarsystem.get_position(parent_name)
+		var parent_world_pos = SolarSystem.get_position(parent_name)
 		var parent_screen_pos = world_to_screen(parent_world_pos)
 
 		# Position and velocity relative to parent body
 		var rel_pos = craft.craft_position - parent_world_pos
 		var rel_vel = craft.craft_velocity  # velocity is already relative
 
-		var mu = constants.G * constants.BODIES[parent_name]["mass"]
-		var elements = orbitsolver.state_to_elements(rel_pos, rel_vel, mu)
-		var points = orbitsolver.orbit_points(elements, parent_screen_pos, meters_per_pixel)
+		var mu = Constants.G * Constants.BODIES[parent_name]["mass"]
+		var elements = OrbitSolver.state_to_elements(rel_pos, rel_vel, mu)
+		var points = OrbitSolver.orbit_points(elements, parent_screen_pos, meters_per_pixel)
 
 		# draw_polyline draws a line through all the points
 		if points.size() > 2:
@@ -131,33 +131,33 @@ func _draw() -> void:
 
 
 func _process(_delta: float) -> void:
-	if tracking != "" and constants.BODIES.has(tracking):
-		focus = solarsystem.get_position(tracking)
+	if tracking != "" and Constants.BODIES.has(tracking):
+		focus = SolarSystem.get_position(tracking)
 	queue_redraw()
-# ─── Click selection ──────────────────────────────────────────────────────────
+# ─── Click Selection ──────────────────────────────────────────────────────────
 
 
-# ─── Click selection ──────────────────────────────────────────────────────────
+# ─── Click Selection ──────────────────────────────────────────────────────────
 
 func _try_select_at(screen_pos: Vector2) -> void:
 	# Convert the click from screen space (pixels) to world space (meters)
 	var world_click = screen_to_world(screen_pos)
 
-	# Minimum selection radius: 10 pixels worth of world space
+	# Minimum Selection radius: 10 pixels worth of world space
 	# This means small bodies are still clickable when zoomed out
 	var min_hit_radius = 10.0 * meters_per_pixel
 
 	var closest_name := ""
 	var closest_dist := INF  # Start with infinity so any real distance beats it
 
-	for body_name in constants.BODIES:
-		var body_pos = solarsystem.get_position(body_name)
+	for body_name in Constants.BODIES:
+		var body_pos = SolarSystem.get_position(body_name)
 
 		# How far is the click from this body's center in world space?
 		var dist = world_click.distance_to(body_pos)
 
 		# Hit radius is whichever is larger: real radius or minimum 10-pixel radius
-		var hit_radius = max(constants.BODIES[body_name]["radius"], min_hit_radius)
+		var hit_radius = max(Constants.BODIES[body_name]["radius"], min_hit_radius)
 
 		# Is the click within this body's hit radius?
 		if dist < hit_radius:
@@ -170,5 +170,5 @@ func _try_select_at(screen_pos: Vector2) -> void:
 	# If we found something, select and track it
 	if closest_name != "":
 		tracking = closest_name
-		selection.select_by_name(closest_name)
+		Selection.select_by_name(closest_name)
 		print("Selected: ", closest_name)
